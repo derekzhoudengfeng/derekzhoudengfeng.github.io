@@ -25,7 +25,7 @@ description: >- # this means to ignore newlines until "baseurl:"
   latest trends in artificial intelligence. Join me on this journey to
   explore the fascinating world of AI and machine learning.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://derekzhoudengfeng.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 # twitter_username: jekyllrb
 # github_username:  derekzhoudengfeng
 
@@ -33,6 +33,16 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 theme: minima
 plugins:
   - jekyll-feed
+
+# _config.yml
+
+markdown: kramdown
+kramdown:
+  input: GFM            # 支持 GitHub 风格的 Markdown
+  math_engine: mathjax  # 使用 MathJax 渲染公式
+  math_engine_opts:
+    preview: true       # 在行内公式前显示预览
+    tex: {}             # 传给 MathJax 的其它 TeX 配置（可空）
 
 # Exclude from processing.
 # The following items will not be processed, by default.
