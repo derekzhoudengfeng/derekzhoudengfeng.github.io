@@ -25,7 +25,7 @@ In this post, we will explore:
 
 ## What is Precision?
 
-> Precision is the percentage of correct positive predictions out of all positive predictions.
+> Precision is the proportion of correct positive predictions out of all positive predictions.
 
 The formula for calculating precision is:
 

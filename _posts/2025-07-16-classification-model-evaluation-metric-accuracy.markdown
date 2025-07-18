@@ -20,7 +20,7 @@ In supervised machine learning, evaluating how well a classification model perfo
 
 ## What is Accuracy?
 
-> Accuracy is the percentage of correct predictions out of total predictions.
+> Accuracy is the proportion of correct predictions out of total predictions.
 
 The formula for calculating accuracy is:
 
@@ -78,8 +78,8 @@ While accuracy is easy to understand and compute, it has significant limitations
 ## Alternatives and Complements
 
 When accuracy alone is not enough, consider using these metrics:
-- **Precision**: $\frac{TP}{TP + FP}$ - of all positive predictions, how many are correct?
-- **Recall (Sensitivity)**: $\frac{TP}{TP + FN}$ - of all actual positives, how many did we predict correctly?
+- **Precision**: $\frac{TP}{TP + FP}$ - proportion of correct positive predictions out of all predicted positives.
+- **Recall (Sensitivity)**: $\frac{TP}{TP + FN}$ - proportion of correct positive predictions out of all actual positives.
 - **F1 Score**: Harmonic mean of precision and recall, balancing both.
 - **ROC-AUC**: Area under the Receiver Operating Characteristic curve, evaluates the trade-off between true positive rate and false positive rate across thresholds.
 
