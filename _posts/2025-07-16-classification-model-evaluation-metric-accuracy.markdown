@@ -2,7 +2,7 @@
 layout: post
 title:  "Classification Model Evaluation Metric: Accuracy"
 date:   2025-07-16 11:20:00 +0800
-categories: evaluation metrics
+categories: machine learning
 ---
 <head>
     <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
