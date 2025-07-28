@@ -1,0 +1,258 @@
+---
+layout: post
+title:  "EDA (Exploratory Data Analysis)"
+date:   2025-07-28 11:30:00 +0800
+categories: machine learning
+---
+<head>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+            inlineMath: [['$','$']]
+            }
+        });
+    </script>
+</head>
+
+Exploratory Data Analysis (EDA) is the process of understanding, cleaning, and visualizing your dataset before applying any modeling techniques. A thorough EDA helps you:
+- Uncover underlying structures and patterns
+- Detect anomalies and outliers
+- Identify missing or inconsistent values
+- Form hypotheses about relationships between variables
+- Inform feature engineering and model selection
+
+Below is an in-depth, step-by-step walkthrough of EDA, complete with practical code snippets in Python.
+
+## 1. Preliminary Data Exploration: Loading and Inspecting Data
+
+Begin by importing the key libraries and loading your data into a pandas DataFrame.
+
+```python
+import pandas as pd
+
+# Load data (e.g., CSV, Excel, SQL)
+df = pd.read_csv("your_dataset.csv")
+
+# Quick peek
+print(df.shape)      # rows, columns
+print(df.head(5))    # first few records
+print(df.info())     # dtypes, non-null counts
+print(df.describe()) # numeric summary statistics
+```
+
+### Key checks:
+- **Dimensions**: Number of rows and columns
+- **Data types**: int, float, object (string), datetime, etc.
+- **Null counts**: How many missing values per column
+
+## 2. Data Cleaning
+
+### 2.1 Handling Missing Values
+
+- **Drop** columns or rows with too many missing values.
+- **Impute** with statistics (mean/median/mode), interpolation, or model-based methods.
+- **Flag** missingness with a new binary feature.
+
+```python
+# Drop rows with >50% missing
+df = df.dropna(thresh=int(0.5 * df.shape[1]), axis=0)
+
+# Impute numeric columns with median
+for col in df.select_dtypes(include=["float", "int"]):
+    df[col].fillna(df[col].median(), inplace=True)
+
+# Impute categorical with mode
+for col in df.select_dtypes(include=["object"]):
+    df[col].fillna(df[col].mode()[0], inplace=True)
+```
+
+### 2.2 Correcting Data Types
+
+Convert columns to appropriate types for analysis:
+
+```python
+# Convert to datetime
+df["order_date"] = pd.to_datetime(df["order_date"])
+
+# Convert numerical codes stored as strings
+df["zipcode"] = df["zipcode"].astype(str)
+```
+
+### 2.3 Removing Duplicates & Inconsistent Entries
+
+```python
+# Identify duplicates
+dupes = df.duplicated().sum()
+
+# Drop duplicates
+df = df.drop_duplicates()
+
+# Standardize categorical entries
+df["country"] = df["country"].str.strip().str.title()
+```
+
+## 3. Univariate Analysis
+
+Examine each variable in isolation to understand its distribution.
+
+### 3.1 Numerical Variables
+
+- **Histograms** to view distribution shape
+- **Boxplots** to identify outliers
+
+```python
+import matplotlib.pyplot as plt
+
+# Histogram
+df["age"].hist(bins=30)
+plt.title("Age Distribution")
+plt.xlabel("Age")
+plt.ylabel("Frequency")
+plt.show()
+
+# Boxplot
+plt.boxplot(df["income"])
+plt.title("Income Boxplot")
+plt.ylabel("Income (USD)")
+plt.show()
+```
+
+### 3.2 Categorical Variables
+
+- **Value counts** for categorical features
+- **Bar charts** for visualizing frequencies
+
+```python
+# Value counts
+print(df["gender"].value_counts())
+
+# Bar chart
+df["gender"].value_counts().plot(kind="bar")
+plt.title("Gender Distribution")
+plt.xlabel("Gender")
+plt.ylabel("Count")
+plt.show()
+```
+
+## 4. Bivariate Analysis
+
+Investigate relationships between pairs of variables.
+
+### 4.1 Numerical vs Numerical
+
+- **Scatter plots** to spot correlations/trends
+- **Correlation coefficient (Pearson/Spearman)** to quantify relationships
+
+```python
+# Scatter plot
+plt.scatter(df["age"], df["income"])
+plt.title("Age vs. Income")
+plt.xlabel("Age")
+plt.ylabel("Income")
+plt.show()
+
+# Correlation matrix
+corr = df.corr()
+print(corr["income"].sort_values(ascending=False))
+```
+
+### 4.2 Categorical vs Numerical
+
+- **Boxplots** of numerical values grouped by category
+- **Violin plots** for richer distribution insights
+
+```python
+import seaborn as sns
+
+sns.boxplot(x="gender", y="income", data=df)
+plt.title("Income by Gender")
+plt.show()
+```
+
+### 4.3 Categorical vs Categorical
+
+- **Contingency tables** and **stacked bar charts**
+
+```python
+# Cross-tabulation
+ct = pd.crosstab(df["gender"], df["purchased"])
+print(ct)
+
+# Stacked bar chart
+ct.plot(kind="bar", stacked=True)
+plt.title("Purchase by Gender")
+plt.xlabel("Gender")
+plt.ylabel("Count")
+plt.show()
+```
+
+## 5. Multivariate Analysis
+
+When more than two variables interact, multivariate analysis helps reveal complex patterns.
+- **Pairplots** for a grid of scatter plots
+- **Heatmaps** of correlation matrices
+- **3D plots** or **contour plots** for three numerical features
+
+```python
+sns.pairplot(df[["age", "income", "credit_score", "purchased"]], hue="purchased")
+plt.show()
+
+# Correlation heatmap
+sns.heatmap(df.corr(), annot=True, fmt=".2f")
+plt.title("Feature Correlation Matrix")
+plt.show()
+```
+
+## 6. Feature Engineering Insights
+
+EDA should guide the creation of new features:
+- **Interaction terms**: e.g., age * income
+- **Binning**: Age groups (e.g., <25, 25–34, 35+)
+- **Ratios**: e.g., debt / income
+- **Date features**: Extract year, month, day from datetime
+
+```python
+# Example: debt-to-income ratio
+df["dti_ratio"] = df["debt"] / df["income"]
+
+# Binning age
+bins = [0, 24, 34, 44, 100]
+labels = ["<25","25-34","35-44","45+"]
+df["age_group"] = pd.cut(df["age"], bins=bins, labels=labels)
+```
+
+## 7. Dimensionality Reduction & Outlier Detection
+
+- **Principal Component Analysis (PCA)** to visualize high-dimensional data
+- **Isolation Forest**, **DBSCAN**, or **Z-score** for outlier detection
+
+```python
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+
+# Standardize
+X = StandardScaler().fit_transform(df.select_dtypes(include=["float","int"]))
+
+# PCA to 2 components
+pca = PCA(n_components=2)
+pcs = pca.fit_transform(X)
+plt.scatter(pcs[:,0], pcs[:,1])
+plt.title("PCA Projection")
+plt.xlabel("PC1")
+plt.ylabel("PC2")
+plt.show()
+```
+
+## 8. Best Practices & Tips
+
+1. **Automate** repetitive EDA tasks with helper functions
+2. **Document** each step: assumptions, decisions, and found anomalies
+3. **Iterate**: revisit EDA after feature engineering and preliminary modeling
+4. **Collaborate**: share interactive notebooks with colleagues for feedback
+5. **Balance depth vs. time**: tailor the depth of EDA to project deadlines
+
+## Conclusion
+
+Exploratory Data Analysis is the cornerstone of any successful machine learning project. By thoroughly understanding your data's structure, quirks, and relationships, you set the stage for robust feature engineering and well-informed model choices. Always treat EDA as an iterative, collaborative process-and your models will benefit greatly.
