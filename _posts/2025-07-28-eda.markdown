@@ -4,17 +4,6 @@ title:  "EDA (Exploratory Data Analysis)"
 date:   2025-07-28 11:30:00 +0800
 categories: machine learning
 ---
-<head>
-    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-    <script type="text/x-mathjax-config">
-        MathJax.Hub.Config({
-            tex2jax: {
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-            inlineMath: [['$','$']]
-            }
-        });
-    </script>
-</head>
 
 Exploratory Data Analysis (EDA) is the process of understanding, cleaning, and visualizing your dataset before applying any modeling techniques. A thorough EDA helps you:
 - Uncover underlying structures and patterns
